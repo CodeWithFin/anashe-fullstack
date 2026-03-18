@@ -2,12 +2,15 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { Minus, Plus, ShoppingBag, Sparkles } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Minus, Plus, ShoppingBag, Sparkles, ArrowRight } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { addToCart } from "@/lib/cart";
 
 type Product = {
   id: string;
+  slug: string;
   name: string;
   category: string;
   price: number;
@@ -18,6 +21,7 @@ type Product = {
 const PRODUCTS: Product[] = [
   {
     id: "p1",
+    slug: "bio-renew-serum",
     name: "Bio-Renew Serum",
     category: "Serum",
     price: 9800,
@@ -26,6 +30,7 @@ const PRODUCTS: Product[] = [
   },
   {
     id: "p2",
+    slug: "barrier-cloud-cream",
     name: "Barrier Cloud Cream",
     category: "Moisturizer",
     price: 7200,
@@ -34,6 +39,7 @@ const PRODUCTS: Product[] = [
   },
   {
     id: "p3",
+    slug: "moonwater-cleanse",
     name: "Moonwater Cleanse",
     category: "Cleanser",
     price: 4800,
@@ -42,6 +48,7 @@ const PRODUCTS: Product[] = [
   },
   {
     id: "p4",
+    slug: "luminous-eye-veil",
     name: "Luminous Eye Veil",
     category: "Treatment",
     price: 6400,
@@ -50,6 +57,7 @@ const PRODUCTS: Product[] = [
   },
   {
     id: "p5",
+    slug: "overnight-repair-mask",
     name: "Overnight Repair Mask",
     category: "Mask",
     price: 8600,
@@ -58,6 +66,7 @@ const PRODUCTS: Product[] = [
   },
   {
     id: "p6",
+    slug: "daily-defense-spf-40",
     name: "Daily Defense SPF 40",
     category: "SPF",
     price: 5600,
@@ -67,7 +76,9 @@ const PRODUCTS: Product[] = [
 ];
 
 export default function ShopPage() {
+  const router = useRouter();
   const [quantities, setQuantities] = useState<Record<string, number>>({});
+  const [addedMessage, setAddedMessage] = useState("");
 
   const formatKsh = (amount: number) =>
     new Intl.NumberFormat("en-KE", {
@@ -100,7 +111,24 @@ export default function ShopPage() {
 
   const handleCheckout = () => {
     if (itemCount === 0) return;
-    window.alert("Checkout is being connected. Your cart is ready to purchase.");
+    router.push("/checkout");
+  };
+
+  const handleAddToBag = (product: Product, qty: number) => {
+    const quantityToAdd = Math.max(1, qty);
+
+    updateQuantity(product.id, quantityToAdd);
+    addToCart({
+      slug: product.slug,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      size: "Standard",
+      quantity: quantityToAdd,
+    });
+
+    setAddedMessage(`${product.name} added to cart.`);
+    window.setTimeout(() => setAddedMessage(""), 1800);
   };
 
   return (
@@ -125,6 +153,7 @@ export default function ShopPage() {
 
       <section className="mx-auto max-w-7xl px-6 lg:px-10 py-10 sm:py-14">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+          {addedMessage ? <p className="lg:col-span-3 text-sm text-emerald-200 font-sans">{addedMessage}</p> : null}
           <div className="lg:col-span-2 grid sm:grid-cols-2 gap-5 sm:gap-6">
             {PRODUCTS.map((product) => {
               const qty = quantities[product.id] ?? 0;
@@ -169,13 +198,21 @@ export default function ShopPage() {
                       </div>
 
                       <button
-                        onClick={() => updateQuantity(product.id, Math.max(1, qty))}
+                        onClick={() => handleAddToBag(product, qty)}
                         className="inline-flex items-center gap-2 rounded-2xl bg-white text-neutral-900 px-4 py-2.5 text-sm font-medium hover:bg-white/90 transition font-sans"
                       >
                         <ShoppingBag className="h-4 w-4" />
                         {qty > 0 ? "In Cart" : "Add to Bag"}
                       </button>
                     </div>
+
+                    <Link
+                      href={`/shop/${product.slug}`}
+                      className="mt-3 inline-flex items-center gap-2 text-sm text-white/80 hover:text-white transition font-sans"
+                    >
+                      View product details
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
                   </div>
                 </article>
               );
