@@ -1,9 +1,26 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Search, ShoppingBag, Menu } from "lucide-react";
 import Link from "next/link";
+import { CART_UPDATED_EVENT, getCartCount } from "@/lib/cart";
 
 export function Header() {
+  const [bagCount, setBagCount] = useState(0);
+
+  useEffect(() => {
+    const syncCount = () => setBagCount(getCartCount());
+    syncCount();
+
+    window.addEventListener("storage", syncCount);
+    window.addEventListener(CART_UPDATED_EVENT, syncCount);
+
+    return () => {
+      window.removeEventListener("storage", syncCount);
+      window.removeEventListener(CART_UPDATED_EVENT, syncCount);
+    };
+  }, []);
+
   const navItems = [
     { label: "Shop", href: "/shop" },
     { label: "Rituals", href: "#" },
@@ -51,10 +68,10 @@ export function Header() {
               Search
             </button>
             <Link 
-              href="/shop" 
+              href="/cart" 
               className="inline-flex items-center gap-2 rounded-2xl bg-white text-neutral-900 px-4 py-2.5 text-sm font-medium hover:bg-white/90 transition font-sans"
             >
-              Bag (0)
+              {`Bag (${bagCount})`}
               <ShoppingBag className="w-4 h-4" />
             </Link>
           </div>
