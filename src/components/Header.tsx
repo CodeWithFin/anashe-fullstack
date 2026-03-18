@@ -7,6 +7,7 @@ import { CART_UPDATED_EVENT, getCartCount } from "@/lib/cart";
 
 export function Header() {
   const [bagCount, setBagCount] = useState(0);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const syncCount = () => setBagCount(getCartCount());
@@ -23,10 +24,10 @@ export function Header() {
 
   const navItems = [
     { label: "Shop", href: "/shop" },
-    { label: "Rituals", href: "#" },
+    { label: "Services", href: "/services" },
     { label: "Ingredients", href: "#" },
     { label: "About", href: "/about" },
-    { label: "Journal", href: "#" },
+    { label: "Journal", href: "/journal" },
   ];
 
   return (
@@ -80,10 +81,40 @@ export function Header() {
             aria-label="Open menu" 
             className="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-2xl border-gradient before:rounded-2xl bg-white/5"
             style={{ backdropFilter: "blur(4px) saturate(1.25)" }}
+            onClick={() => setIsMenuOpen((prev) => !prev)}
           >
             <Menu className="w-5 h-5 text-white" />
           </button>
         </div>
+
+        {isMenuOpen ? (
+          <div className="md:hidden pb-4">
+            <div
+              className="border-gradient before:rounded-3xl rounded-3xl bg-white/5 p-4"
+              style={{ backdropFilter: "blur(4px) saturate(1.25)" }}
+            >
+              <nav className="flex flex-col gap-2">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    className="rounded-2xl px-3 py-2 text-sm text-white/85 hover:bg-white/10 transition font-sans"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+                <Link
+                  href="/cart"
+                  className="rounded-2xl px-3 py-2 text-sm text-white/85 hover:bg-white/10 transition font-sans"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {`Bag (${bagCount})`}
+                </Link>
+              </nav>
+            </div>
+          </div>
+        ) : null}
       </div>
     </header>
   );
