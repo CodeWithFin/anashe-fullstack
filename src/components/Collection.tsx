@@ -29,7 +29,7 @@ export function Collection() {
             <div className="mt-6">
               <div className="flex items-center gap-3 flex-wrap">
                 <h3 className="text-2xl sm:text-3xl text-zinc-100 font-bricolage font-semibold tracking-tighter">Restorative Serums</h3>
-                <span className="inline-flex items-center rounded-2xl px-3 py-1 text-sm text-zinc-200 bg-white/5 border-gradient before:rounded-2xl font-sans" style={{ backdropFilter: "blur(4px) saturate(1.25)" }}>From $85</span>
+                <span className="inline-flex items-center rounded-2xl px-3 py-1 text-sm text-zinc-200 bg-white/5 border-gradient before:rounded-2xl font-sans" style={{ backdropFilter: "blur(4px) saturate(1.25)" }}>From KSh 8,500</span>
               </div>
               <p className="text-zinc-400 text-sm sm:text-base mt-3 font-sans">Concentrated formulas targeting fine lines, dullness, and hydration deep within.</p>
             </div>
@@ -39,13 +39,13 @@ export function Collection() {
             <div className="mt-6">
               <div className="flex items-center gap-3 flex-wrap">
                 <h3 className="text-2xl sm:text-3xl text-zinc-100 font-bricolage font-semibold tracking-tighter">Essential Creams</h3>
-                <span className="inline-flex items-center rounded-2xl px-3 py-1 text-sm text-zinc-200 bg-white/5 border-gradient before:rounded-2xl font-sans" style={{ backdropFilter: "blur(4px) saturate(1.25)" }}>From $65</span>
+                <span className="inline-flex items-center rounded-2xl px-3 py-1 text-sm text-zinc-200 bg-white/5 border-gradient before:rounded-2xl font-sans" style={{ backdropFilter: "blur(4px) saturate(1.25)" }}>From KSh 6,500</span>
               </div>
               <p className="text-zinc-400 text-sm sm:text-base mt-3 font-sans">Rich, barrier-building moisture that locks in hydration for 24 hours.</p>
             </div>
 
             <div className="mt-8 flex flex-wrap items-center gap-4">
-              <Link href="#work" className="inline-flex items-center justify-center h-14 px-6 rounded-2xl text-base font-medium text-white bg-white/5 border-gradient before:rounded-2xl hover:bg-white/10 transition shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] font-sans" 
+              <Link href="/shop" className="inline-flex items-center justify-center h-14 px-6 rounded-2xl text-base font-medium text-white bg-white/5 border-gradient before:rounded-2xl hover:bg-white/10 transition shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] font-sans" 
                 style={{ backdropFilter: "blur(4px) saturate(1.25)" }}
               >
                 View Collection
