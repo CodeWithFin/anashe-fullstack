@@ -43,9 +43,9 @@ export const Footer = () => {
           <div>
             <h4 className="text-[10px] tracking-widest uppercase text-white/30 font-normal mb-6">Shop</h4>
             <ul className="flex flex-col gap-4 text-sm font-light text-white/60">
-              <li><a href="#" className="hover:text-white transition-colors">Facial Skincare</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Body Care</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Sunscreens</a></li>
+              <li><Link href="/face" className="hover:text-white transition-colors">Facial Skincare</Link></li>
+              <li><Link href="/body" className="hover:text-white transition-colors">Body Care</Link></li>
+              <li><Link href="/services" className="hover:text-white transition-colors">Services</Link></li>
               <li><Link href="/brands" className="hover:text-white transition-colors">Brands</Link></li>
             </ul>
           </div>
