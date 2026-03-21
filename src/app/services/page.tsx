@@ -39,7 +39,7 @@ const SERVICES = [
 
 export default function ServicesPage() {
   return (
-    <main className="min-h-screen bg-anashe-bg font-poppins selection:bg-anashe-mint selection:text-anashe-bg">
+    <main className="min-h-screen bg-anashe-bg font-poppins selection:bg-anashe-mint selection:text-anashe-bg overflow-x-hidden">
       <Navbar />
       
       {/* Hero Header */}

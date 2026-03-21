@@ -8,7 +8,7 @@ import { Footer } from '@/components/layout/Footer';
 
 export default function BodyPage() {
   return (
-    <main className="min-h-screen bg-anashe-bg font-poppins selection:bg-anashe-pink selection:text-anashe-bg">
+    <main className="min-h-screen bg-anashe-bg font-poppins selection:bg-anashe-pink selection:text-anashe-bg overflow-x-hidden">
       <Navbar />
       
       {/* Hero Section */}
