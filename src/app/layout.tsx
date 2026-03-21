@@ -30,7 +30,6 @@ export default function RootLayout({
           <ToastProvider>
             <QuickViewProvider>
               <GlobalLoader />
-              <CustomCursor />
               {children}
             </QuickViewProvider>
           </ToastProvider>
