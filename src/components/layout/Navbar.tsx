@@ -75,26 +75,53 @@ export const Navbar = ({ onAuthClick }: { onAuthClick?: () => void }) => {
         </button>
       </div>
 
+      {/* Mobile Sidebar Overlay */}
+      <div 
+        className={cn(
+          "fixed inset-0 bg-black/60 backdrop-blur-sm z-[480] transition-opacity duration-500 lg:hidden",
+          isMobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
+        )}
+        onClick={() => setIsMobileMenuOpen(false)}
+      />
+
+      {/* Mobile Sidebar */}
       <div className={cn(
-        "fixed inset-0 bg-anashe-bg z-[490] flex flex-col items-center justify-center gap-8 transition-all duration-500 lg:hidden",
-        isMobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
+        "fixed top-0 right-0 w-[300px] h-full bg-anashe-bg z-[490] flex flex-col p-12 gap-8 transition-transform duration-500 ease-out lg:hidden border-l border-white/10",
+        isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
       )}>
-        {[
-          { label: 'Face', href: '/face' },
-          { label: 'Body', href: '/body' },
-          { label: 'Services', href: '/services' },
-          { label: 'Brands', href: '/brands' },
-          { label: 'My Account', href: '#' }
-        ].map((item) => (
-          <Link 
-            key={item.label} 
-            href={item.href} 
-            className="text-xl tracking-widest uppercase font-light" 
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            {item.label}
-          </Link>
-        ))}
+        <button 
+          className="absolute top-6 right-6 text-anashe-fg/40 hover:text-white transition-colors"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          <Icon icon="solar:close-circle-linear" width="1.5em" />
+        </button>
+
+        <div className="flex flex-col gap-6 mt-12">
+          {[
+            { label: 'Face', href: '/face' },
+            { label: 'Body', href: '/body' },
+            { label: 'Services', href: '/services' },
+            { label: 'Brands', href: '/brands' },
+            { label: 'My Account', href: '#' }
+          ].map((item) => (
+            <Link 
+              key={item.label} 
+              href={item.href} 
+              className="text-lg tracking-widest uppercase font-light text-white hover:text-anashe-lila transition-colors" 
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+
+        <div className="mt-auto pt-12 border-t border-white/5 flex flex-col gap-4">
+          <div className="text-[10px] tracking-[0.3em] uppercase text-white/20">Follow us</div>
+          <div className="flex gap-4">
+            <Icon icon="solar:camera-linear" className="text-white/40 text-xl" />
+            <Icon icon="solar:letter-linear" className="text-white/40 text-xl" />
+          </div>
+        </div>
       </div>
     </nav>
   );
