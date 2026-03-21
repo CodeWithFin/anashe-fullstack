@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import Link from 'next/link';
 import { Icon } from '@iconify/react';
 
 export const Footer = () => {
@@ -45,7 +46,7 @@ export const Footer = () => {
               <li><a href="#" className="hover:text-white transition-colors">Facial Skincare</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Body Care</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Sunscreens</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Brands</a></li>
+              <li><Link href="/brands" className="hover:text-white transition-colors">Brands</Link></li>
             </ul>
           </div>
           <div>
