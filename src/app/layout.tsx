@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
 import { ToastProvider } from "@/components/ui/Toast";
+import { QuickViewProvider } from "@/components/ui/QuickViewModal";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { GlobalLoader } from "@/components/ui/GlobalLoader";
 
@@ -27,9 +28,11 @@ export default function RootLayout({
       <body className={`${poppins.variable} font-poppins antialiased bg-anashe-bg text-anashe-fg`}>
         <CartProvider>
           <ToastProvider>
-            <GlobalLoader />
-            <CustomCursor />
-            {children}
+            <QuickViewProvider>
+              <GlobalLoader />
+              <CustomCursor />
+              {children}
+            </QuickViewProvider>
           </ToastProvider>
         </CartProvider>
       </body>
