@@ -22,7 +22,7 @@ export default function AnasheLandingPage() {
 
   return (
     <QuickViewProvider>
-      <main className="min-h-screen">
+      <main className="min-h-screen overflow-x-hidden">
         <Navbar onAuthClick={() => setIsAuthOpen(true)} />
         
         <Hero />

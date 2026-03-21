@@ -76,7 +76,7 @@ const BRANDS_DATA = [
 
 export default function BrandsPage() {
   return (
-    <main className="min-h-screen bg-anashe-bg font-poppins selection:bg-anashe-lila selection:text-anashe-bg">
+    <main className="min-h-screen bg-anashe-bg font-poppins selection:bg-anashe-lila selection:text-anashe-bg overflow-x-hidden">
       <Navbar />
       
       {/* Hero Header */}
