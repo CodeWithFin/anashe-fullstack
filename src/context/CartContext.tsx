@@ -2,44 +2,100 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-interface CartItem {
+export interface CartItem {
   id: string;
   name: string;
   price: number;
+  img?: string;
+  brand?: string;
+  quantity: number;
 }
 
 interface CartContextType {
+  items: CartItem[];
   cartCount: number;
   cartTotal: number;
   isFreeShipping: boolean;
   shippingProgress: number;
-  addToCart: (item: CartItem) => void;
-  addKitToCart: (items: CartItem[]) => void;
+  addToCart: (item: Omit<CartItem, 'quantity'>) => void;
+  removeFromCart: (itemId: string) => void;
+  updateQuantity: (itemId: string, delta: number) => void;
+  clearCart: () => void;
+  addKitToCart: (items: Omit<CartItem, 'quantity'>[]) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [cartCount, setCartCount] = useState(0);
-  const [cartTotal, setCartTotal] = useState(0);
+  const [items, setItems] = useState<CartItem[]>([]);
 
-  const isFreeShipping = cartTotal >= 50000;
-  const shippingProgress = Math.min(100, (cartTotal / 50000) * 100);
+  // Load cart from localStorage
+  useEffect(() => {
+    const savedCart = localStorage.getItem('anashe_cart');
+    if (savedCart) {
+      try {
+        setItems(JSON.parse(savedCart));
+      } catch (e) {
+        console.error("Failed to parse cart", e);
+      }
+    }
+  }, []);
 
-  const addToCart = (item: CartItem) => {
-    setCartCount(prev => prev + 1);
-    setCartTotal(prev => prev + item.price);
+  // Save cart to localStorage
+  useEffect(() => {
+    localStorage.setItem('anashe_cart', JSON.stringify(items));
+  }, [items]);
+
+  const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
+  const cartTotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+  const FREE_SHIPPING_THRESHOLD = 5000; // Updated to KSH equivalent approx (example)
+  const isFreeShipping = cartTotal >= FREE_SHIPPING_THRESHOLD;
+  const shippingProgress = Math.min(100, (cartTotal / FREE_SHIPPING_THRESHOLD) * 100);
+
+  const addToCart = (product: Omit<CartItem, 'quantity'>) => {
+    setItems(prev => {
+      const existing = prev.find(i => i.id === product.id);
+      if (existing) {
+        return prev.map(i => i.id === product.id ? { ...i, quantity: i.quantity + 1 } : i);
+      }
+      return [...prev, { ...product, quantity: 1 }];
+    });
   };
 
-  const addKitToCart = (items: CartItem[]) => {
-    setCartCount(prev => prev + items.length);
-    const kitTotal = items.reduce((sum, item) => sum + item.price, 0);
-    // Apply progressive discount logic here or elsewhere
-    setCartTotal(prev => prev + kitTotal);
+  const removeFromCart = (itemId: string) => {
+    setItems(prev => prev.filter(i => i.id !== itemId));
+  };
+
+  const updateQuantity = (itemId: string, delta: number) => {
+    setItems(prev => prev.map(i => {
+      if (i.id === itemId) {
+        const newQty = Math.max(1, i.quantity + delta);
+        return { ...i, quantity: newQty };
+      }
+      return i;
+    }));
+  };
+
+  const clearCart = () => setItems([]);
+
+  const addKitToCart = (kitItems: Omit<CartItem, 'quantity'>[]) => {
+    kitItems.forEach(item => addToCart(item));
   };
 
   return (
-    <CartContext.Provider value={{ cartCount, cartTotal, isFreeShipping, shippingProgress, addToCart, addKitToCart }}>
+    <CartContext.Provider value={{ 
+      items, 
+      cartCount, 
+      cartTotal, 
+      isFreeShipping, 
+      shippingProgress, 
+      addToCart, 
+      removeFromCart,
+      updateQuantity,
+      clearCart,
+      addKitToCart 
+    }}>
       {children}
     </CartContext.Provider>
   );
