@@ -54,14 +54,7 @@
   }
   
   * {
-    cursor: none;
     box-sizing: border-box;
-  }
-  
-  @media (max-width: 768px) {
-    * {
-      cursor: auto;
-    }
   }
 
   body {

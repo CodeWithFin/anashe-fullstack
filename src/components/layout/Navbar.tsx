@@ -52,12 +52,12 @@ export const Navbar = ({ onAuthClick }: { onAuthClick?: () => void }) => {
           <button className="hidden lg:flex w-9 h-9 items-center justify-center text-anashe-fg/60 hover:text-anashe-fg hover:bg-white/5 rounded-full transition-colors">
             <Icon icon="solar:heart-linear" width="1.2em" />
           </button>
-          <button className="relative w-9 h-9 flex items-center justify-center text-anashe-fg/60 hover:text-anashe-fg hover:bg-white/5 rounded-full transition-colors">
+          <Link href="/cart" className="relative w-9 h-9 flex items-center justify-center text-anashe-fg/60 hover:text-anashe-fg hover:bg-white/5 rounded-full transition-colors">
             <Icon icon="solar:bag-2-linear" width="1.2em" />
             <div className="absolute -top-1 -right-1 w-4 h-4 bg-anashe-lila text-anashe-bg rounded-full text-[10px] font-normal flex items-center justify-center">
               {cartCount}
             </div>
-          </button>
+          </Link>
           
           <button 
             className="hidden lg:flex w-9 h-9 items-center justify-center text-anashe-fg/60 hover:text-anashe-fg hover:bg-white/5 rounded-full transition-colors"
