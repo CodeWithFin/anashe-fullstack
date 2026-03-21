@@ -1,35 +1,20 @@
 import type { Metadata } from "next";
-import { Inter, Bricolage_Grotesque, Newsreader, Oswald, DM_Sans } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
+import { CartProvider } from "@/context/CartContext";
+import { ToastProvider } from "@/components/ui/Toast";
+import { CustomCursor } from "@/components/ui/CustomCursor";
+import { GlobalLoader } from "@/components/ui/GlobalLoader";
 
-const inter = Inter({
-  variable: "--font-inter",
+const poppins = Poppins({
+  variable: "--font-poppins",
   subsets: ["latin"],
-});
-
-const bricolage = Bricolage_Grotesque({
-  variable: "--font-bricolage",
-  subsets: ["latin"],
-});
-
-const newsreader = Newsreader({
-  variable: "--font-newsreader",
-  subsets: ["latin"],
-});
-
-const oswald = Oswald({
-  variable: "--font-oswald",
-  subsets: ["latin"],
-});
-
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
-  subsets: ["latin"],
+  weight: ["200", "300", "400"],
 });
 
 export const metadata: Metadata = {
-  title: "ANASHE — Advanced Botanical Skincare",
-  description: "Unlock the secret to ageless luminosity. ANASHE fuses rare botanicals with clinical precision to restore your skin's natural radiance.",
+  title: "Anashe | K-Beauty",
+  description: "Authentic Korean skincare for radiant skin. Seoul's science at your service.",
 };
 
 export default function RootLayout({
@@ -39,10 +24,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.variable} ${bricolage.variable} ${newsreader.variable} ${oswald.variable} ${dmSans.variable} antialiased bg-neutral-950 font-sans`}
-      >
-        {children}
+      <body className={`${poppins.variable} font-poppins antialiased bg-anashe-bg text-anashe-fg`}>
+        <CartProvider>
+          <ToastProvider>
+            <GlobalLoader />
+            <CustomCursor />
+            {children}
+          </ToastProvider>
+        </CartProvider>
       </body>
     </html>
   );
