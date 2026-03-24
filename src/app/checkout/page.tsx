@@ -44,10 +44,16 @@ export default function CheckoutPage() {
       });
 
       const data = await response.json();
+      
+      if (!response.ok) {
+        showToast(data.error || "Error initiating M-Pesa payment. Please try again.");
+        return;
+      }
+      
       if (data.ResponseCode === '0') {
         showToast("STK Push sent! Please check your phone.");
       } else {
-        showToast("Error initiating M-Pesa payment. Please try again.");
+        showToast(data.CustomerMessage || data.errorMessage || "Error processing payment. Please try again.");
       }
     } catch (error) {
       showToast("Something went wrong. Please try again later.");

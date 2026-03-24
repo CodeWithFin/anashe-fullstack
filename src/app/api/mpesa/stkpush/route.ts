@@ -40,8 +40,19 @@ export async function POST(req: NextRequest) {
     }
 
     const accessToken = await getAccessToken();
-    const timestamp = new Date().toISOString().replace(/[^0-9]/g, '').slice(0, 14);
+    
+    // Safaricom expects timestamp in East African Time (EAT/UTC+3)
+    const now = new Date();
+    const eatTime = new Date(now.getTime() + (3 * 60 * 60 * 1000));
+    const timestamp = eatTime.toISOString().replace(/[^0-9]/g, '').slice(0, 14);
+    
     const password = Buffer.from(`${SHORTCODE}${PASSKEY}${timestamp}`).toString('base64');
+    
+    // Ensure SITE_URL is not localhost, as Daraja requires a public HTTPS URL
+    let callbackUrl = `${process.env.SITE_URL}/api/mpesa/callback`;
+    if (!process.env.SITE_URL || process.env.SITE_URL.includes('localhost')) {
+      console.warn("WARNING: M-Pesa Callback URL is using localhost or is undefined. Daraja API will likely reject this with 'Invalid ReturnURL'. Use a public URL (e.g. ngrok).");
+    }
 
     const stkResponse = await fetch(`${BASE_URL}/mpesa/stkpush/v1/processrequest`, {
         headers: {
@@ -58,7 +69,7 @@ export async function POST(req: NextRequest) {
             PartyA: formattedPhone,
             PartyB: isSandbox ? SHORTCODE : SHORTCODE, // For BuyGoods, PartyB is the Till Number
             PhoneNumber: formattedPhone,
-            CallBackURL: `${process.env.SITE_URL}/api/mpesa/callback`,
+            CallBackURL: callbackUrl,
             AccountReference: `Anashe-${orderId}`,
             TransactionDesc: 'Payment for Anashe Skincare',
         }),
@@ -66,9 +77,15 @@ export async function POST(req: NextRequest) {
 
     const stkData = await stkResponse.json();
     console.log('M-Pesa Response:', stkData);
+    
+    if (stkData.errorMessage || stkData.errorCode) {
+      throw new Error(stkData.errorMessage || 'M-Pesa API Error');
+    }
+    
     return NextResponse.json(stkData);
-  } catch (error: any) {
-    console.error('M-Pesa STK Push Error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error('M-Pesa STK Push Error:', err.message || err);
+    return NextResponse.json({ error: err.message || 'Failed to initiate M-Pesa payment' }, { status: 500 });
   }
 }
